@@ -22,7 +22,6 @@
             position: relative;
         }
 
-        
         .heart-bg {
             position: absolute;
             font-size: 30px;
@@ -196,14 +195,12 @@
     </style>
 </head>
 <body>
-    
     <div class="heart-bg" style="top: 10%; left: 10%;">❤️</div>
     <div class="heart-bg" style="top: 20%; right: 15%;">💕</div>
     <div class="heart-bg" style="bottom: 15%; left: 20%;">💖</div>
     <div class="heart-bg" style="bottom: 25%; right: 10%;">💗</div>
 
-    <div class="container" id="pregunta" style="display:block;">
-
+    <div class="container" id="pregunta">
         <div class="emoji">💝</div>
         <h1>Una pregunta especial...</h1>
         <p class="question">
@@ -214,7 +211,8 @@
             <button class="btn-no" id="btnNo">No 😢</button>
         </div>
     </div>
-    <div class="container message-final" id="mensajeFinal" style="display:none;">
+
+    <div class="container message-final" id="mensajeFinal">
         <div class="corazones">💕💖💗</div>
         <p class="mensaje-final-texto">¡Sabía que dirías que sí!</p>
         <p class="question">Nos vemos el</p>
@@ -225,18 +223,16 @@
     <script>
         let intentos = 0;
         let botonMovido = false;
-        
-        
         const esMobil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
         function hayColision(rect1, rect2, margenSeguridad = 20) {
             return !(rect1.right + margenSeguridad < rect2.left || 
-                    rect1.left - margenSeguridad > rect2.right || 
-                    rect1.bottom + margenSeguridad < rect2.top || 
-                    rect1.top - margenSeguridad > rect2.bottom);}
+                     rect1.left - margenSeguridad > rect2.right || 
+                     rect1.bottom + margenSeguridad < rect2.top || 
+                     rect1.top - margenSeguridad > rect2.bottom);
+        }
         
         function moverBotonNo(evento) {
-            
             if (evento) {
                 evento.preventDefault();
             }
@@ -244,7 +240,6 @@
             const btnNo = document.getElementById('btnNo');
             const btnSi = document.querySelector('.btn-si');
             const container = document.querySelector('.container');
-            
             
             if (!botonMovido) {
                 btnNo.style.position = 'absolute';
@@ -254,27 +249,22 @@
             
             intentos++;
             
-            
             const containerRect = container.getBoundingClientRect();
             const btnSiRect = btnSi.getBoundingClientRect();
             const btnNoRect = btnNo.getBoundingClientRect();
-            
-            
             const margen = esMobil ? 30 : 20;
-            const margenSeguridad = esMobil ? 80 : 60; 
+            const margenSeguridad = esMobil ? 80 : 60;
             
             let newX, newY;
-            let intentosMax = 50; 
+            let intentosMax = 50;
             let posicionValida = false;
             
             while (!posicionValida && intentosMax > 0) {
-                
                 const maxX = containerRect.width - btnNoRect.width - (margen * 2);
                 const maxY = containerRect.height - btnNoRect.height - (margen * 2);
                 
                 newX = Math.random() * maxX + margen;
                 newY = Math.random() * maxY + margen;
-                
                 
                 const tempRect = {
                     left: containerRect.left + newX,
@@ -283,7 +273,6 @@
                     bottom: containerRect.top + newY + btnNoRect.height
                 };
                 
-                
                 if (!hayColision(tempRect, btnSiRect, margenSeguridad)) {
                     posicionValida = true;
                 } else {
@@ -291,12 +280,9 @@
                 }
             }
             
-            
             if (!posicionValida) {
-                
                 const siCentroY = btnSiRect.top + btnSiRect.height / 2 - containerRect.top;
                 const siCentroX = btnSiRect.left + btnSiRect.width / 2 - containerRect.left;
-                
                 
                 if (siCentroY < containerRect.height / 2) {
                     newY = containerRect.height - btnNoRect.height - margen;
@@ -304,14 +290,12 @@
                     newY = margen;
                 }
                 
-                
                 if (siCentroX < containerRect.width / 2) {
                     newX = containerRect.width - btnNoRect.width - margen;
                 } else {
                     newX = margen;
                 }
             }
-            
             
             if (intentos > 3) {
                 btnNo.style.fontSize = esMobil ? '14px' : '14px';
@@ -331,10 +315,8 @@
                 btnNo.style.transition = 'all 0.04s ease';
             }
             
-            
             btnNo.style.left = newX + 'px';
             btnNo.style.top = newY + 'px';
-            
             
             const textos = [
                 'No 😢',
@@ -358,12 +340,10 @@
             }
         }
         
-        
         window.addEventListener('DOMContentLoaded', function() {
             const btnNo = document.getElementById('btnNo');
             
             if (esMobil) {
-                
                 btnNo.addEventListener('touchstart', moverBotonNo, { passive: false });
                 btnNo.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -375,13 +355,8 @@
         });
         
         function respuestaSi() {
-            
             document.getElementById('pregunta').style.display = 'none';
-            
-            
             document.getElementById('mensajeFinal').style.display = 'block';
-            
-            
             crearConfetti();
         }
         
